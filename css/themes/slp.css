@@ -1,0 +1,133 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15/04/2019, 11:13:20 PM
+    Author     : Talent
+*/
+
+#progress-wrp {
+  border: 1px solid #0099CC;
+  padding: 1px;
+  position: relative;
+  height: 30px;
+  border-radius: 3px;
+  margin: 10px;
+  text-align: left;
+  background: #fff;
+  box-shadow: inset 1px 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+#progress-wrp .progress-bar {
+  height: 100%;
+  border-radius: 3px;
+  background-color: #f39ac7;
+  width: 0;
+  box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.11);
+}
+
+#progress-wrp .status {
+  top: 3px;
+  left: 50%;
+  position: absolute;
+  display: inline-block;
+  color: #000000;
+}
+
+/** Table **/
+.my-table {
+	border: 2px solid #1C6EA4;
+	background-color: #EEEEEE;
+	text-align: left;
+	/*width: 100%;*/
+	border-collapse: collapse;
+}
+.my-table td, .my-table th {
+	border: 1px solid #AAAAAA;
+        padding: 5px 10px 5px 10px;
+	/*padding: 3px 10px;*/
+}
+
+.my-table tbody td {
+	font-size: 13px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.my-table thead {
+	background: #1C6EA4;
+	background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+	background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+	background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+}
+
+.my-table thead th {
+	font-size: 15px;
+	font-weight: bold;
+	color: #e5e5e5;
+	border-left: 1px solid #aaaaaa;
+	text-align: center;
+}
+
+.my-table thead th:first-child {
+	border-left: none;
+}
+
+.my-table tr:nth-child(even) {
+	background: #D0E4F5;
+}
+
+.my-table tfoot {
+	font-size: 14px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background: #D0E4F5;
+	background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+	background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+	background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+	border-top: 2px solid #444444;
+}
+
+.my-table tfoot td {
+	font-size: 14px;
+}
+
+.my-table tfoot .links {
+	text-align: right;
+}
+
+.my-table tfoot .links a{
+	display: inline-block;
+	background: #1C6EA4;
+	color: #FFFFFF;
+	padding: 2px 8px;
+	border-radius: 5px;
+}
+
+/** Loading Spinner **/
+.loading_spinner {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+}
+.loading_spinner:after {
+  content: " ";
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #cef;
+  border-color: #cef transparent #cef transparent;
+  animation: loading_spinner 1.2s linear infinite;
+}
+@keyframes loading_spinner {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
