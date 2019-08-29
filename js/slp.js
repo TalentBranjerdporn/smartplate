@@ -1,19 +1,46 @@
-$(document).ready(function() {
+$(document).ready(function () {
     $('#api_call').click(function () {
-        $.post(function($) {
-            
+        $.ajax({
+            url: 'https://ubuxgyols2.execute-api.ap-southeast-2.amazonaws.com/prod/',
+            headers: {'Authorization' : 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMzZlMDIyZS02ODZkLTQ0NzMtYmRjOS1kODAyOGFjZjkyNmMiLCJuYW1lIjoiVGhlIFVuaXZlcnNpdHkgb2YgUXVlZW5zbGFuZCIsImlhdCI6MTUxNjIzOTAyMn0.k2RscL-28hP2oggWlfjGr7DULk2Hsb6fBMb9V-VuF7s'},
+            data: {"query": "query {\n  nevdisVINSearch_v2(vin: \"XXXXXXXXXXXXXXXXX\") {\n    vin\n    plate {\n      number\n      state\n    }\n    make\n    model\n  }\n}"},
+            success: function (result) {
+                console.log(result);
+            },
         });
+//        var url = 'https://ubuxgyols2.execute-api.ap-southeast-2.amazonaws.com/prod/';
+//        var jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMzZlMDIyZS02ODZkLTQ0NzMtYmRjOS1kODAyOGFjZjkyNmMiLCJuYW1lIjoiVGhlIFVuaXZlcnNpdHkgb2YgUXVlZW5zbGFuZCIsImlhdCI6MTUxNjIzOTAyMn0.k2RscL-28hP2oggWlfjGr7DULk2Hsb6fBMb9V-VuF7s';
+//        var xhr = new XMLHttpRequest();
+//        if ('withCredentials' in xhr) {
+//            xhr.open("POST", url, true);
+//        } else {
+//            xhr = null;
+//            // CORES not supported
+//            console.log("Browser not supported");
+//        }
+//        
+//        if (xhr) {
+//            xhr.onload = function() {
+//                var response = xzhr.responseText;
+//                
+//            };
+//            
+//            xhr.onerror = function() {
+//                console.log("something went wrong");
+//            }
+//        }
+        
     });
 });
 
 function send_request() {
-    $(document).ready(function($) {
-        
+    $(document).ready(function ($) {
+
     });
 }
 
 function file_submit() {
-    $(document).ready(function($) {
+    $(document).ready(function ($) {
         var file = $('#camera-file')[0].files[0];
         var upload = new Upload(file);
 
@@ -23,7 +50,7 @@ function file_submit() {
 }
 
 function lpr_submit() {
-    $(document).ready(function($) {
+    $(document).ready(function ($) {
         // Open connection to api.openalpr.com
         var load_div = $('.loading_spinner');
         load_div.show();
@@ -36,22 +63,22 @@ function lpr_submit() {
             recognize_vehicle: '1'
         };
         var query = Object.keys(params)
-            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-            .join('&');
+                .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                .join('&');
         var url = "https://api.openalpr.com/v2/recognize_bytes?" + query;
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url);
-        
+
         // Send POST data and display response
         var file = $('#lpr-camera-file')[0].files[0];
         var reader = new FileReader();
         reader.readAsBinaryString(file);
 
-        reader.onload = function() {
+        reader.onload = function () {
 //            console.log(btoa(reader.result));
 //            $("#img-preview").attr("src",btoa(reader.result));
             xhr.send(btoa(reader.result));
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) {
                     //document.getElementById("response").innerHTML = xhr.responseText;
                     var output = JSON.parse(xhr.responseText);
@@ -92,7 +119,7 @@ function lpr_submit() {
                 }
             }
         };
-        reader.onerror = function() {
+        reader.onerror = function () {
             load_div.hide();
             console.log('There were some problems sending');
         };
