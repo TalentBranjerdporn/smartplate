@@ -1,3 +1,17 @@
+$(document).ready(function() {
+    $('#api_call').click(function () {
+        $.post(function($) {
+            
+        });
+    });
+});
+
+function send_request() {
+    $(document).ready(function($) {
+        
+    });
+}
+
 function file_submit() {
     $(document).ready(function($) {
         var file = $('#camera-file')[0].files[0];

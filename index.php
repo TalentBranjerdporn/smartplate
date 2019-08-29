@@ -30,11 +30,14 @@
             define('LP_TESTING', 'ON');
     }
     
+    define('MOBILE_LPR', TRUE);
+    
     /**********
     INCLUDES
    **********/
    include LP_INCLUDES."header.php";
    include LP_INCLUDES."functions.php";
+   include "secrets.php";
    ?>
     
     <body>
@@ -55,8 +58,10 @@
 		
 		<br>
 		<img id="img-preview" src=""> -->
-                
-                <br>
+                <select>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
                 <form id="lpr-file">
                     <input type="file" accept="image/*" capture="camera" id="lpr-camera-file" name="image">
                 </form>
@@ -66,6 +71,11 @@
                 
                 <h2>Result</h2>
                 <div id="decode-result"></div><br>
+                
+                <div>
+                    <h2>API Call</h2>
+                    <button type="button" id="api_call">Press</button>
+                </div>
             </div>
 
             <div data-role="footer" data-position="fixed" data-theme="b">
