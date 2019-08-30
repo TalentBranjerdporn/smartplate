@@ -2,7 +2,9 @@
 
 /*
  * CustomImage Class.
- * Used for editing images server-side.
+ * 
+ * Used for editing images server-side. Made with the GD library.
+ * 
  */
 
 class CustomImage {

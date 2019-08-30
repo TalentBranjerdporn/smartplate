@@ -1,9 +1,34 @@
 $(document).ready(function () {
     $('#api_call').click(function () {
+        var url = 'https://ubuxgyols2.execute-api.ap-southeast-2.amazonaws.com/prod/';
+        var jwt = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMzZlMDIyZS02ODZkLTQ0NzMtYmRjOS1kODAyOGFjZjkyNmMiLCJuYW1lIjoiVGhlIFVuaXZlcnNpdHkgb2YgUXVlZW5zbGFuZCIsImlhdCI6MTUxNjIzOTAyMn0.k2RscL-28hP2oggWlfjGr7DULk2Hsb6fBMb9V-VuF7s';
+        var body = '{"query":"query {  nevdisVINSearch_v2(vin: "XXXXXXXXXXXXXXXXX") {    vin    plate {      number      state    }    make    model  }}"}';
+        var superquery = `query {
+  nevdisVINSearch_v2(vin: "XXXXXXXXXXXXXXXXX") {
+    vin
+    plate {
+      number
+      state
+    }
+    make
+    model
+    engine_number
+    vehicle_type
+    body_type
+    colour
+  }
+}
+`;
+
         $.ajax({
-            url: 'https://ubuxgyols2.execute-api.ap-southeast-2.amazonaws.com/prod/',
-            headers: {'Authorization' : 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMzZlMDIyZS02ODZkLTQ0NzMtYmRjOS1kODAyOGFjZjkyNmMiLCJuYW1lIjoiVGhlIFVuaXZlcnNpdHkgb2YgUXVlZW5zbGFuZCIsImlhdCI6MTUxNjIzOTAyMn0.k2RscL-28hP2oggWlfjGr7DULk2Hsb6fBMb9V-VuF7s'},
-            data: {"query": "query {\n  nevdisVINSearch_v2(vin: \"XXXXXXXXXXXXXXXXX\") {\n    vin\n    plate {\n      number\n      state\n    }\n    make\n    model\n  }\n}"},
+            url: url,
+            headers: {'Authorization': jwt},
+            contentType: "application/json",
+            data: JSON.stringify({
+                query: superquery
+             }),
+            crossOrigin: true,
+            type: "post",
             success: function (result) {
                 console.log(result);
             },
@@ -15,7 +40,7 @@ $(document).ready(function () {
 //            xhr.open("POST", url, true);
 //        } else {
 //            xhr = null;
-//            // CORES not supported
+//            // CORS not supported
 //            console.log("Browser not supported");
 //        }
 //        
@@ -29,7 +54,7 @@ $(document).ready(function () {
 //                console.log("something went wrong");
 //            }
 //        }
-        
+
     });
 });
 
