@@ -36,7 +36,8 @@
     include LP_INCLUDES . "header.php";
     include LP_INCLUDES . "functions.php";
     include "secrets.php";
-    include "config.php";
+    include LP_INCLUDES . "config.php";
+    include LP_INCLUDES . "database.php";
     ?>
 
     <body>

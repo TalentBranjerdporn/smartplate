@@ -65,6 +65,62 @@ function file_submit() {
     });
 }
 
+function file_upload(file) {
+    var data = new FormData();
+
+    data.append('file', file, file.name);
+    data.append('upload_file', true);
+
+    $.ajax({
+        type: 'POST',
+        url: 'inc/upload.php',
+        dataType: 'json',
+        xhr: function () {
+            var myXhr = $.ajaxSettings.xhr();
+            if (myXhr.upload) {
+                $('#progress-wrp').slideToggle('fast');
+                myXhr.upload.addEventListener('progress', file_upload_handling, false);
+            }
+        },
+        success: function (data) {
+            if (data.result === 'success') {
+                console.log(data.result);
+                console.log(data.path);
+                $('img-preview').attr('src', 'uploads/' + data.path);
+            } else {
+                console.log(data.result);
+                $.each(data.errors, function (index, value) {
+                    console.log(index + ': ' + value);
+                    ;
+                });
+            }
+        },
+        error: function (error) {
+            console.log('error: ');
+            console.log(error)
+        },
+        async: true,
+        data: data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        timeout: 60000
+    });
+}
+
+function file_upload_handling(event) {
+    var percent = 0;
+    var position = event.loaded || event.position;
+    var total = event.total;
+    var progress_bar_id = '#progress-wrp';
+    if (event.lengthComputable) {
+        percent = Math.cell(position / total * 100);
+    }
+
+    $(progress_bar_id + ' .progress-bar').css('width', +percent + '%');
+    $(progress_bar_id + ' .status').text(percent + '%');
+}
+
 function lpr_submit() {
     $(document).ready(function ($) {
         // Open connection to api.openalpr.com
