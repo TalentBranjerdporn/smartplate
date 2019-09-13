@@ -2,13 +2,13 @@ var Upload = function (file) {
     this.file = file;
 };
 
-Upload.prototype.getType = function() {
+Upload.prototype.getType = function () {
     return this.file.type;
 };
-Upload.prototype.getSize = function() {
+Upload.prototype.getSize = function () {
     return this.file.size;
 };
-Upload.prototype.getName = function() {
+Upload.prototype.getName = function () {
     return this.file.name;
 };
 Upload.prototype.doUpload = function () {
@@ -22,32 +22,31 @@ Upload.prototype.doUpload = function () {
     $.ajax({
         type: "POST",
         url: "inc/upload.php",
-		dataType: 'json',
+        dataType: 'json',
         xhr: function () {
             var myXhr = $.ajaxSettings.xhr();
             if (myXhr.upload) {
-				$("#progress-wrp").slideToggle("fast");
+                $("#progress-wrp").slideToggle("fast");
                 myXhr.upload.addEventListener('progress', that.progressHandling, false);
             }
             return myXhr;
         },
         success: function (data) {
-            // your callback here
-			if(data.result === "success") {
-				console.log(data.result);
-				console.log(data.path);
-				$("#img-preview").attr("src","uploads/" + data.path);
-			} else {
-				console.log(data.result);
-				$.each(data.errors, function(index, value) {
-					console.log(index + ": " + value);
-				});
-			}
+            if (data.result === "success") {
+                console.log(data.result);
+                console.log(data.path);
+                $("#img-preview").attr("src", "uploads/" + data.path);
+            } else {
+                console.log(data.result);
+                $.each(data.errors, function (index, value) {
+                    console.log(index + ": " + value);
+                });
+            }
         },
         error: function (error) {
             // handle error
-			console.log('error: ');
-			console.log(error);
+            console.log('error: ');
+            console.log(error);
         },
         async: true,
         data: formData,

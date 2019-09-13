@@ -2,59 +2,50 @@ $(document).ready(function () {
     $('#api_call').click(function () {
         var url = 'https://ubuxgyols2.execute-api.ap-southeast-2.amazonaws.com/prod/';
         var jwt = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMzZlMDIyZS02ODZkLTQ0NzMtYmRjOS1kODAyOGFjZjkyNmMiLCJuYW1lIjoiVGhlIFVuaXZlcnNpdHkgb2YgUXVlZW5zbGFuZCIsImlhdCI6MTUxNjIzOTAyMn0.k2RscL-28hP2oggWlfjGr7DULk2Hsb6fBMb9V-VuF7s';
-        var body = '{"query":"query {  nevdisVINSearch_v2(vin: "XXXXXXXXXXXXXXXXX") {    vin    plate {      number      state    }    make    model  }}"}';
-        var superquery = `query {
-  nevdisVINSearch_v2(vin: "XXXXXXXXXXXXXXXXX") {
-    vin
-    plate {
-      number
-      state
-    }
-    make
-    model
-    engine_number
-    vehicle_type
-    body_type
-    colour
-  }
-}
-`;
+        var vin_query = `query {
+                            nevdisVINSearch_v2(vin: "XXXXXXXXXXXXXXXXX") {
+                                vin
+                                plate {
+                                    number
+                                    state
+                                }
+                                make
+                                model
+                                engine_number
+                                vehicle_type
+                                body_type
+                                colour
+                            }
+                        }`;
+        var plate_query = `query {
+                                nevdisPlateSearch_v2(plate: "XXXXXXXXXXXXXXXXX", state:NSW) {
+                                    vin
+                                    plate {
+                                      number
+                                      state
+                                    }
+                                    make
+                                    model
+                                    engine_number
+                                    vehicle_type
+                                    body_type
+                                    colour
+                                }
+                            }`;
 
         $.ajax({
             url: url,
             headers: {'Authorization': jwt},
             contentType: "application/json",
             data: JSON.stringify({
-                query: superquery
-             }),
+                query: query
+            }),
             crossOrigin: true,
             type: "post",
             success: function (result) {
                 console.log(result);
             },
         });
-//        var url = 'https://ubuxgyols2.execute-api.ap-southeast-2.amazonaws.com/prod/';
-//        var jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMzZlMDIyZS02ODZkLTQ0NzMtYmRjOS1kODAyOGFjZjkyNmMiLCJuYW1lIjoiVGhlIFVuaXZlcnNpdHkgb2YgUXVlZW5zbGFuZCIsImlhdCI6MTUxNjIzOTAyMn0.k2RscL-28hP2oggWlfjGr7DULk2Hsb6fBMb9V-VuF7s';
-//        var xhr = new XMLHttpRequest();
-//        if ('withCredentials' in xhr) {
-//            xhr.open("POST", url, true);
-//        } else {
-//            xhr = null;
-//            // CORS not supported
-//            console.log("Browser not supported");
-//        }
-//        
-//        if (xhr) {
-//            xhr.onload = function() {
-//                var response = xzhr.responseText;
-//                
-//            };
-//            
-//            xhr.onerror = function() {
-//                console.log("something went wrong");
-//            }
-//        }
-
     });
 });
 
