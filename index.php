@@ -35,9 +35,9 @@
     /* INCLUDES */
     include LP_INCLUDES . "header.php";
     include LP_INCLUDES . "functions.php";
-    include "secrets.php";
     include LP_INCLUDES . "config.php";
     include LP_INCLUDES . "database.php";
+    include "secrets.php";
     ?>
 
     <body>
@@ -71,7 +71,7 @@
                     <input type="file" accept="image/*" capture="camera" id="lpr-camera-file" name="image">
                 </form>
                 <br>
-                <button type="button" data-icon="camera" onclick="lpr_submit()">LPR</button>
+                <button id="btn-lpr-submit" type="button" data-icon="camera">LPR</button>
                 <br>
 
                 <h2>Result</h2>
@@ -85,6 +85,11 @@
 
             <div data-role="footer" data-position="fixed" data-theme="b">
                 <h1>Camera Upload</h1>
+            </div>
+            
+            <button id="testing-btn" type="button">Test</button>
+            <div id="testing-div">
+                
             </div>
 
         </div>

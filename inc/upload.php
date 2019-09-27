@@ -1,7 +1,50 @@
 <?php
 
+include 'CustomImage.php';
+
+$upload_file = filter_input(INPUT_POST, 'upload_file');
+$camera_file = filter_input(INPUT_POST, 'camera_file');
+$credit_cost = filter_input(INPUT_POST, 'credit_cost');
+
+if (isset($camera_file)) {
+    // there is a file there.
+    list($type, $data) = explode(';', $camera_file);
+    list(, $data) = explode(',', $data);
+    $file_data = base64_decode($data);
+
+    $finfo = finfo_open();
+    $file_mime = finfo_buffer($finfo, $file_data, FILEINFO_MIME_TYPE);
+    
+    $cust_img = new CustomImage($file_data, true);
+    
+// File extension from mime type
+    if ($file_mime_type == 'image/jpeg' || $file_mime_type == 'image/jpg')
+        $file_type = 'jpeg';
+    else if ($file_mime_type == 'image/png')
+        $file_type = 'png';
+    else if ($file_mime_type == 'image/gif')
+        $file_type = 'gif';
+    else
+        $file_type = 'other';
+
+    // Validate type of file
+    if (in_array($file_type, ['jpeg', 'png', 'gif'])) {
+        // Set a unique name to the file and save
+        $file_name = uniqid() . '.' . $file_type;
+        file_put_contents("../uploads/" . $file_name, $file_data);
+    } else {
+        echo 'Error : Only JPEG, PNG & GIF allowed';
+    }
+
+    $img = new CustomImage();
+
+    die();
+} else {
+    die();
+}
+
 // process input from file
-if (isset($_POST['upload_file']) && $_POST['upload_file']) {
+if (isset($upload_file)) {
     $errors = array();
     $file_name = $_FILES['file']['name'];
     $file_size = $_FILES['file']['size'];
@@ -47,4 +90,5 @@ if (isset($_POST['upload_file']) && $_POST['upload_file']) {
 
     // create html output here possibly
 }
-?>
+
+die();

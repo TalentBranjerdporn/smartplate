@@ -12,9 +12,13 @@ class CustomImage {
     private $image;
     private $image_type;
 
-    public function __construct(string $filename = null) {
+    public function __construct(string $filename = null, bool $base64 = true) {
         if (!empty($filename)) {
-            $this->load($filename);
+            if ($base64) {
+                $this->import($filename);
+            } else {
+                $this->load($filename);
+            }
         }
     }
 
@@ -36,7 +40,26 @@ class CustomImage {
             $this->image = imagecreatefromgif($filename);
         } else {
             // image is not valid
-			echo 'error not valid';
+            echo 'error not valid';
+        }
+    }
+
+    public function import(string $file_data) {
+        $this->image = imagecreatefromstring($file_data);
+
+        $finfo = finfo_open();
+        $file_mime_type = finfo_buffer($finfo, $file_data, FILEINFO_MIME_TYPE);
+
+        if ($file_mime_type == 'image/jpeg' || $file_mime_type == 'image/jpg') {
+            $this->image_type = 'jpeg';
+        } else if ($file_mime_type == 'image/png') {
+            $this->image_type = 'png';
+        } else if ($file_mime_type == 'image/gif') {
+            $this->image_type = 'gif';
+        } else {
+            // only accept the above filetypes
+            echo 'error not valid';
+            $this->image_type = 'other';
         }
     }
 
@@ -112,7 +135,8 @@ class CustomImage {
 
     public function addTimestamp(int $font, int $x, int $y, int $r = 255, int $g = 255, int $b = 255, int $alpha = 0) {
         $timestamp = date('Y-m-d G:i:s');
-        
+
         $this->addString($font, $x, $y, $timestamp, $r, $g, $b, $alpha);
     }
+
 }
