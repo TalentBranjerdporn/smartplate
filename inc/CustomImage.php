@@ -64,20 +64,29 @@ class CustomImage {
     }
 
     public function save($filename, $image_type = '', $permissions = null) {
+        $result = false;
+        
         if ($image_type === '') {
             $image_type = $this->image_type;
         }
 
         if ($image_type == IMAGETYPE_JPEG) {
-            imagejpeg($this->image, $filename);
+            $result = imagejpeg($this->image, $filename);
         } elseif ($image_type == IMAGETYPE_PNG) {
-            imagepng($this->image, $filename);
+            $result = imagepng($this->image, $filename);
         } elseif ($image_type == IMAGETYPE_GIF) {
-            imagegif($this->image, $filename);
+            $result = imagegif($this->image, $filename);
         }
 
         if ($permissions != null) {
             chmod($filename, $permissions);
+        }
+        
+        if ($result) {
+            //success
+        } else {
+            //fail
+            echo 'Failed to save image';
         }
     }
 
@@ -138,5 +147,12 @@ class CustomImage {
 
         $this->addString($font, $x, $y, $timestamp, $r, $g, $b, $alpha);
     }
-
+    
+    public function getImageType() {
+        return $this->image_type;
+    }
+    
+    public function getImage() {
+        return $this->image;
+    }
 }

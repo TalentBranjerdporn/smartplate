@@ -1,22 +1,25 @@
 <?php
 
-include 'CustomImage.php';
+include 'PlateImage.php';
+include 'functions.php';
 
 $upload_file = filter_input(INPUT_POST, 'upload_file');
 $camera_file = filter_input(INPUT_POST, 'camera_file');
 $credit_cost = filter_input(INPUT_POST, 'credit_cost');
+$results = filter_input_array(INPUT_POST, 'results');
+
+//dump_custom($results);
 
 if (isset($camera_file)) {
     // there is a file there.
+    dump_custom($camera_file);
     list($type, $data) = explode(';', $camera_file);
     list(, $data) = explode(',', $data);
     $file_data = base64_decode($data);
 
     $finfo = finfo_open();
-    $file_mime = finfo_buffer($finfo, $file_data, FILEINFO_MIME_TYPE);
-    
-    $cust_img = new CustomImage($file_data, true);
-    
+    $file_mime_type = finfo_buffer($finfo, $file_data, FILEINFO_MIME_TYPE);
+
 // File extension from mime type
     if ($file_mime_type == 'image/jpeg' || $file_mime_type == 'image/jpg')
         $file_type = 'jpeg';
@@ -27,16 +30,21 @@ if (isset($camera_file)) {
     else
         $file_type = 'other';
 
+    $img = new PlateImage($file_data);
+    $img->addTimestamp(5, 0, 0);
+    echo $img->getImageType();
+    $img->save("../uploads/PlateImage.jpeg");
+    
+    die();
+
     // Validate type of file
     if (in_array($file_type, ['jpeg', 'png', 'gif'])) {
         // Set a unique name to the file and save
         $file_name = uniqid() . '.' . $file_type;
-        file_put_contents("../uploads/" . $file_name, $file_data);
+        unset($cust_img);
     } else {
         echo 'Error : Only JPEG, PNG & GIF allowed';
     }
-
-    $img = new CustomImage();
 
     die();
 } else {
