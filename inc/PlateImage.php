@@ -113,25 +113,18 @@ class PlateImage {
         imagefilledpolygon($this->image, $points, 4, $colour);
         imagepolygon($this->image, $points, 4, $colour);
     }
-
-    public function addString(int $font, int $x, int $y, string $string, int $r = 255, int $g = 255, int $b = 255, int $alpha = 0) {
+    
+    public function addString(int $size, int $x, int $y, string $string, int $r = 0, int $g = 0, int $b = 0, int $alpha = 0, int $angle = 0) {
         $colour = imagecolorallocatealpha($this->image, $r, $g, $b, $alpha);
-
-        imagestring($this->image, $font, $x, $y, $string, $colour);
+        $font = dirname(__FILE__) . '\fonts\arial.ttf';
+        
+        imagettftext($this->image, $size, $angle, $x, $y, $colour, $font, $string);
     }
-
-    public function addTimestamp(int $font, int $x, int $y, int $r = 255, int $g = 255, int $b = 255, int $alpha = 0) {
+    
+    public function addTimestamp(int $size, int $x, int $y, int $r = 0, int $g = 0, int $b = 0, int $alpha = 0, int $angle = 0) {
         $timestamp = date('Y-m-d G:i:s');
 
-        $this->addString($font, $x, $y, $timestamp, $r, $g, $b, $alpha);
-    }
-    
-    public function getImageType() {
-        return $this->image_type;
-    }
-    
-    public function getImage() {
-        return $this->image;
+        $this->addString($size, $x, $y, $timestamp, $t, $g, $b, $alpha, $angle);
     }
 }
 
