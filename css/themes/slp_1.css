@@ -138,7 +138,7 @@ and open the template in the editor.
 img {
     max-width: 100%;
     max-height: 640px;
-    display:block;
+    display: block;
     margin-left: auto;
     margin-right: auto;   
 }
@@ -151,3 +151,8 @@ img {
     margin: 3px;
     padding: 3px;
 }*/
+
+/** Select **/
+#select-zones {
+    margin-bottom: 10px;
+}

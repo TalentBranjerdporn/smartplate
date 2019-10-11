@@ -56,6 +56,90 @@ $(document).ready(function ($) {
             },
         });
     });
+    
+    $('.lpr-check').change(function() {
+        if ($('.lpr-check:checked').length == $('.lpr-check').length) {
+            $('#rego-submit').attr('disabled', false);
+            $('#rego-submit').parent().removeClass('ui-state-disabled');
+        } else {
+            $('#rego-submit').attr('disabled', true);
+            $('#rego-submit').parent().addClass('ui-state-disabled');
+        }
+    });
+});
+
+$(document).on('submit', '.details-form', function(e) {
+    e.preventDefault();
+    
+    var form = $(this);
+    
+    var func = form.find('input[name="func"]').val();
+    var data = form.serialize();
+    $.post('inc/ajax.php', data, function(output, status) {
+        switch(func) {
+            case 'save':
+                console.log(output);
+                // redirect
+                window.location.replace('test.php');
+                break;
+            default:
+                console.log('Unknown function: ' + func);1
+        }
+    });
+});
+
+$(document).on('click', '#details-correct', function() {
+    var url = 'https://ubuxgyols2.execute-api.ap-southeast-2.amazonaws.com/prod/';
+    var jwt = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMzZlMDIyZS02ODZkLTQ0NzMtYmRjOS1kODAyOGFjZjkyNmMiLCJuYW1lIjoiVGhlIFVuaXZlcnNpdHkgb2YgUXVlZW5zbGFuZCIsImlhdCI6MTUxNjIzOTAyMn0.k2RscL-28hP2oggWlfjGr7DULk2Hsb6fBMb9V-VuF7s';
+    var vin_query = `query {
+                        nevdisVINSearch_v2(vin: "XXXXXXXXXXXXXXXXX") {
+                            vin
+                            plate {
+                                number
+                                state
+                            }
+                            make
+                            model
+                            engine_number
+                            vehicle_type
+                            body_type
+                            colour
+                        }
+                    }`;
+    var plate = 'XXXXXXXXXXXXXXXXX';
+    var state = 'NSW';
+    var plate_query = `query {
+                            nevdisPlateSearch_v2(plate: "${plate}", state:${state}) {
+                                vin
+                                plate {
+                                  number
+                                  state
+                                }
+                                make
+                                model
+                                engine_number
+                                vehicle_type
+                                body_type
+                                colour
+                            }
+                        }`;
+    $.ajax({
+        url: url,
+        headers: {'Authorization': jwt},
+        contentType: "application/json",
+        data: JSON.stringify({
+            query: plate_query
+        }),
+        crossOrigin: true,
+        type: "post",
+        success: function (result) {
+            console.log(result);
+        },
+    });
+});
+
+$(document).on('click', '#details-incorrect', function() {
+    
 });
 
 function send_request() {
@@ -144,7 +228,7 @@ function lpr_test() {
     var reader = new FileReader();
     reader.readAsDataURL(img);
     reader.onload = function () {
-        var output = JSON.parse(test_data);
+        var output = {'lpr_results' :  JSON.parse(test_data)};
 
         $.extend(output, {'camera_file': reader.result});
         console.log(output);

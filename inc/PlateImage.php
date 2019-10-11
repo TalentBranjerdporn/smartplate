@@ -1,30 +1,35 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
 class PlateImage {
+
     private $image;
     private $image_type;
-    
-    public function __construct(string $file_data) {
+
+    public function __construct(string $file_data, bool $is_data = false) {
         if (!empty($file_data)) {
-            $this->load($file_data);
+            if ($is_data) {
+            $this->import($file_data);
+            } else {
+                $this->load($file_data);
+            }
         }
     }
-    
+
     public function __destruct() {
         if (is_resource($this->image)) {
             imagedestroy($this->image);
         }
     }
-    
-    public function load(string $file_data) {
+
+    public function import(string $file_bytes) {
         $this->image = imagecreatefromstring($file_data);
-        
+
         $finfo = finfo_open();
         $file_mime_type = finfo_buffer($finfo, $file_data, FILEINFO_MIME_TYPE);
 
@@ -41,9 +46,25 @@ class PlateImage {
         }
     }
     
+    public function load(string $filename) {
+        $image_info = getimagesize($filename);
+        $this->image_type = $image_info[2];
+
+        if ($this->image_type === IMAGETYPE_JPEG) {
+            $this->image = imagecreatefromjpeg($filename);
+        } elseif ($this->image_type === IMAGETYPE_PNG) {
+            $this->image = imagecreatefrompng($filename);
+        } elseif ($this->image_type === IMAGETYPE_GIF) {
+            $this->image = imagecreatefromgif($filename);
+        } else {
+            // image is not valid
+            echo 'error not valid';
+        }
+    }
+
     public function save($filename, $image_type = '', $permissions = null) {
         $result = false;
-        
+
         if ($image_type === '') {
             $image_type = $this->image_type;
         }
@@ -59,7 +80,7 @@ class PlateImage {
         if ($permissions != null) {
             chmod($filename, $permissions);
         }
-        
+
         if ($result) {
             //success
         } else {
@@ -74,6 +95,10 @@ class PlateImage {
 
     public function getHeight() {
         return imagesy($this->image);
+    }
+
+    public function getImageType() {
+        return $this->image_type;
     }
 
     /**
@@ -92,7 +117,7 @@ class PlateImage {
      *
      * @access  public
      */
-    public function drawLine(int $x1, int $y1, int $x2, int $y2, int $thick = 1, int $r = 255, int $g = 255, int $b = 255, int $alpha = 0) {
+    public function drawLine(int $x1, int $y1, int $x2, int $y2, int $thick = 1, int $r = 0, int $g = 0, int $b = 0, int $alpha = 0) {
         $colour = imagecolorallocatealpha($this->image, $r, $g, $b, $alpha);
 
         if ($thick == 1) {
@@ -113,18 +138,24 @@ class PlateImage {
         imagefilledpolygon($this->image, $points, 4, $colour);
         imagepolygon($this->image, $points, 4, $colour);
     }
-    
+
     public function addString(int $size, int $x, int $y, string $string, int $r = 0, int $g = 0, int $b = 0, int $alpha = 0, int $angle = 0) {
         $colour = imagecolorallocatealpha($this->image, $r, $g, $b, $alpha);
         $font = dirname(__FILE__) . '\fonts\arial.ttf';
-        
+
         imagettftext($this->image, $size, $angle, $x, $y, $colour, $font, $string);
     }
-    
-    public function addTimestamp(int $size, int $x, int $y, int $r = 0, int $g = 0, int $b = 0, int $alpha = 0, int $angle = 0) {
-        $timestamp = date('Y-m-d G:i:s');
 
-        $this->addString($size, $x, $y, $timestamp, $t, $g, $b, $alpha, $angle);
+    public function addTimestamp(int $size, int $x, int $y, int $epoch = 0, int $r = 0, int $g = 0, int $b = 0, int $alpha = 0, int $angle = 0) {
+        $format = 'Y-m-d G:i:s';
+        if ($epoch === 0) {
+            $timestamp = date($format);
+        } else {
+            $dt = new DateTime("@$epoch");
+            $timestamp = $dt->format($format);
+        }
+
+        $this->addString($size, $x, $y, $timestamp, $r, $g, $b, $alpha, $angle);
     }
-}
 
+}

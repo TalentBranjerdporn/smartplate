@@ -6,23 +6,13 @@
 <meta name="Description" content="Upload a picture with camera." />
 <meta name="keywords" content="UQ, ITEE, Final Year Thesis Topic" />
 
-<title>Smart Plate</title>
-
 <link rel="stylesheet" href="css/themes/slp_themeroller.min.css" />
 <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
-<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
+<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css" />
 
-
-<!-- <link rel="stylesheet" type="text/css" href="public.css" /> -->
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-<script type="text/javascript">
-    if (typeof jQuery == 'undefined') {
-        document.write(unescape("%3Clink rel='stylesheet' href='css/jquery.mobile.structure-1.4.5.min.css' /%3E"));
-        document.write(unescape("%3Cscript src='js/jquery-1.11.1.min.js' type='text/javascript'%3E%3C/script%3E"));
-        document.write(unescape("%3Cscript src='js/jquery.mobile-1.4.5.min.js' type='text/javascript'%3E%3C/script%3E"));
-    }
-</script>
+<?php /* JQUERY */ ?>
+<script src="js/jquery/jquery-1.11.1.min.js"></script>
+<script src="js/jquery/jquery.mobile-1.4.5.min.js"></script>
 
 <?php /* CSS */ ?>
 <link rel="stylesheet" type="text/css" href="css/themes/slp.css" />

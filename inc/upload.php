@@ -1,47 +1,106 @@
 <?php
-
 include 'PlateImage.php';
 include 'functions.php';
 
 $upload_file = filter_input(INPUT_POST, 'upload_file');
 $camera_file = filter_input(INPUT_POST, 'camera_file');
 $credit_cost = filter_input(INPUT_POST, 'credit_cost');
-$results = filter_input_array(INPUT_POST, 'results');
+$lpr_results = $_POST['lpr_results'];
 
-//dump_custom($results);
+// important ones to use later possibly
+$epoch_time = $lpr_results['epoch_time'];
+$results = $lpr_results['results'];
+
+//dump_custom($epoch_time);
 
 if (isset($camera_file)) {
     // there is a file there.
-    dump_custom($camera_file);
     list($type, $data) = explode(';', $camera_file);
     list(, $data) = explode(',', $data);
     $file_data = base64_decode($data);
 
-    $finfo = finfo_open();
-    $file_mime_type = finfo_buffer($finfo, $file_data, FILEINFO_MIME_TYPE);
-
-// File extension from mime type
-    if ($file_mime_type == 'image/jpeg' || $file_mime_type == 'image/jpg')
-        $file_type = 'jpeg';
-    else if ($file_mime_type == 'image/png')
-        $file_type = 'png';
-    else if ($file_mime_type == 'image/gif')
-        $file_type = 'gif';
-    else
-        $file_type = 'other';
-
     $img = new PlateImage($file_data);
-    $img->addTimestamp(5, 0, 0);
-    echo $img->getImageType();
-    $img->save("../uploads/PlateImage.jpeg");
-    
-    die();
+    // change to epoch time
+    $img->addTimestamp(200, 40, 200, intval(substr($epoch_time, 0, 10)), 255);
+
+    // detect all plates
+    foreach ($results as $plate) {
+        $name = $plate['plate'];
+        $coords = $plate['coordinates'];
+
+        for ($i = 0; $i < count($coords); $i++) {
+            $x1 = $coords[$i]['x'];
+            $y1 = $coords[$i]['y'];
+            if ($i == count($coords) - 1) {
+                $x2 = $coords[0]['x'];
+                $y2 = $coords[0]['y'];
+            } else {
+                $x2 = $coords[$i + 1]['x'];
+                $y2 = $coords[$i + 1]['y'];
+            }
+
+            $img->drawLine($x1, $y1, $x2, $y2, 10, 255);
+        }
+    }
+
+    switch ($img->getImageType()) {
+        case 1:
+            $file_type = 'gif';
+            break;
+        case 2:
+            $file_type = 'jpeg';
+            break;
+        case 3:
+            $file_type = 'png';
+            break;
+        default:
+            $file_type = 'other';
+    }
 
     // Validate type of file
     if (in_array($file_type, ['jpeg', 'png', 'gif'])) {
         // Set a unique name to the file and save
         $file_name = uniqid() . '.' . $file_type;
-        unset($cust_img);
+        $img->save('../uploads/' . $file_name);
+        // free up memory when finished
+        unset($img);
+        // here return image data to be checked?
+        echo "<img id='preview-img' src='uploads/$file_name' />";
+        ?>
+        <h4>Are these details correct</h4>
+        <table class="my-table">
+            <tr>
+                <th>Property</th>
+                <th>Confidence (%)</th>
+            </tr>
+            <tr>
+                <td>Plate: <?php echo $results[0]['plate']; ?></td>
+                <td><?php echo $results[0]['confidence']; ?></td>
+            </tr>
+            <tr>
+                <td>Region: <?php echo $results[0]['region']; ?></td>
+                <td><?php echo $results[0]['region_confidence']; ?></td>
+            </tr>
+            <tr>
+                <td>Make: <?php echo $results[0]['vehicle']['make'][0]['name']; ?></td>
+                <td><?php echo $results[0]['vehicle']['make'][0]['confidence']; ?></td>
+            </tr>
+            <tr>
+                <td>Model: <?php echo $results[0]['vehicle']['make_model'][0]['name']; ?></td>
+                <td><?php echo $results[0]['vehicle']['make_model'][0]['confidence']; ?></td>
+            </tr>
+            <tr>
+                <td>Body Type: <?php echo $results[0]['vehicle']['body_type'][0]['name']; ?></td>
+                <td><?php echo $results[0]['vehicle']['body_type'][0]['confidence']; ?></td>
+            </tr>
+            <tr>
+                <td>Colour: <?php echo $results[0]['vehicle']['color'][0]['name']; ?></td>
+                <td><?php echo $results[0]['vehicle']['color'][0]['confidence']; ?></td>
+            </tr>
+        </table>
+        <button id="details-correct" type="button">Yes</button>
+        <button id="details-incorrect" type="button">No</button>
+        <?php
     } else {
         echo 'Error : Only JPEG, PNG & GIF allowed';
     }
@@ -51,7 +110,7 @@ if (isset($camera_file)) {
     die();
 }
 
-// process input from file
+// process input from file. Old version
 if (isset($upload_file)) {
     $errors = array();
     $file_name = $_FILES['file']['name'];
