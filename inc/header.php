@@ -6,7 +6,7 @@
 <meta name="Description" content="Upload a picture with camera." />
 <meta name="keywords" content="UQ, ITEE, Final Year Thesis Topic" />
 
-<link rel="stylesheet" href="css/themes/slp_themeroller.min.css" />
+<link rel="stylesheet" href="css/themes/custom_theme.min.css" />
 <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
 <link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css" />
 
@@ -19,4 +19,3 @@
 
 <?php /* JS */ ?>
 <script type="text/javascript" language="javascript" src="js/slp.js"></script>
-<script type="text/javascript" language="javascript" src="js/upload.js"></script>

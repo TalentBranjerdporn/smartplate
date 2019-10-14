@@ -136,3 +136,11 @@ and open the template in the editor.
     width: 100%;
     height: auto;
 }
+
+.lpr-confirm-field {
+    margin-top: 0;
+}
+
+.lpr-title {
+    margin: 0 !important;
+}

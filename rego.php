@@ -16,9 +16,9 @@
     </head>
 
     <body>
-        <div data-role="page" data-theme="c">
-            <div data-role="header" data-position="fixed" data-theme="c">
-                <h1>Smart License Plate</h1>
+        <div data-role="page" data-theme="a">
+            <div data-role="header" data-position="fixed" data-theme="a">
+                <h1 class="lpr-title">Smart License Plate</h1>
             </div>
 
             <div data-role="content" data-theme="b">
@@ -39,7 +39,14 @@
                     $state = 'NSW';
                 } else {
                     $plate = $_POST['plate'];
-                    $state = strtoupper(substr($_POST['state'], 3, 6));
+//                    $state = strtoupper(substr($_POST['state'], 3, 6));
+                    if ($_POST['state'] == -1) {
+                        ?>
+                        The state is not valid. Please start <a href="index.php">again</a>
+                        <?php
+                        die();
+                    }
+                    $state = strtoupper($_POST['state']);
                 }
 //                dump_custom($plate);
 //                dump_custom($state);
@@ -86,8 +93,6 @@ EOD;
                 ?>
                 <label id="db-plate">Plate: <strong><?php echo $_POST['plate']; ?></strong></label>
                 <label id="db-state">State: <strong><?php echo $_POST['state']; ?></strong></label>
-                <label id="db-epoch">Epoch: <strong><?php echo $_POST['epoch']; ?></strong></label>
-                <label id="db-filename">Filename: <strong><?php echo $_POST['filename']; ?></strong></label>
                 <table class="my-table">
                     <tr>
                         <th></th>
@@ -124,10 +129,10 @@ EOD;
                     <input type="hidden" name="rego_model" value="<?php echo $results['model']; ?>" />
                     <input type="hidden" name="rego_colour" value="<?php echo $results['colour']; ?>" />
                     <input type="hidden" name="infringe" value="<?php echo true; ?>" />
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Submit" data-icon="check" data-iconpos="right" />
                 </form>
-                <form action="test.php">
-                    <input type="submit" value="Restart"/>
+                <form action="index.php">
+                    <input type="submit" value="Restart" data-icon="delete" data-iconpos="right"/>
                 </form>
             </div>
         </div>
